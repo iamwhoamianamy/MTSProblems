@@ -42,10 +42,15 @@
         maxValue++;
         for (int i = maxValue - sortFactor - 1; i < maxValue; i++)
         {
-            while (counts.ContainsKey(i) && counts[i] != 0)
+            if (counts.ContainsKey(i))
             {
-                counts[i]--;
-                yield return i;
+                while (counts[i] != 0)
+                {
+                    counts[i]--;
+                    yield return i;
+                }
+
+                counts.Remove(i);
             }
         }
     }
