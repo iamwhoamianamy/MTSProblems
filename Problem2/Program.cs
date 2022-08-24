@@ -19,6 +19,7 @@ class Program
             return _number.ToString(_ifp);
         }
 
+        // Без перегрузки оператора он будет работать как обычная конкатенация строк (10 + 5 = 105)
         public static string operator +(Number a, string b) =>
             (a._number + Int32.Parse(b)).ToString();
     }
