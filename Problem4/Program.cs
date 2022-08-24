@@ -10,31 +10,39 @@
     /// <remarks>Известно, что потребители метода зачастую не будут вычитывать данные до конца</remarks>
     static IEnumerable<int> Sort(IEnumerable<int> inputStream, int sortFactor, int maxValue)
     {
-        maxValue++;
-        List<int> counts = new List<int>(maxValue);
-
-        for (int i = 0; i < maxValue; i++)
-        {
-            counts.Add(0);
-        }
+        Dictionary<int, int> counts = new Dictionary<int, int>();
 
         foreach (var number in inputStream)
         {
-            counts[number]++;
+            if(counts.ContainsKey(number))
+            {
+                counts[number]++;
+            }
+            else
+            {
+                counts.Add(number, 1);
+            }
 
             for (int i = 0; i < number - sortFactor; i++)
             {
-                while(counts[i] != 0)
+                if(counts.ContainsKey(i))
                 {
-                    counts[i]--;
-                    yield return i;
+                    while (counts[i] != 0)
+                    {
+                        counts[i]--;
+                        yield return i;
+                    }
+
+                    counts.Remove(i);
                 }
+
             }
         }
 
-        for(int i = maxValue - sortFactor - 1; i < maxValue; i++)
+        maxValue++;
+        for (int i = maxValue - sortFactor - 1; i < maxValue; i++)
         {
-            while (counts[i] != 0)
+            while (counts.ContainsKey(i) && counts[i] != 0)
             {
                 counts[i]--;
                 yield return i;
@@ -44,7 +52,7 @@
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        //var list = new List<int>() { 2, 4, 3, 3, 7, 6, 8, 7 };
         var list = new List<int>() { 2, 4, 1, 2, 7, 5, 8, 5 };
 
         foreach (var number in Sort(list, 3, list.Max()))
