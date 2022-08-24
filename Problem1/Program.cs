@@ -7,7 +7,7 @@ class Program
     {
         try
         {
-            FailProcess(1);
+            FailProcess(2);
         }
         catch { }
 
@@ -27,12 +27,19 @@ class Program
             }
             case 1:
             {
-                var workers = Process.GetProcessesByName("Problem1");
-                foreach (var worker in workers)
+                var processes = Process.GetProcessesByName("Problem1");
+                foreach (var process in processes)
                 {
-                    worker.Kill();
-                    worker.Dispose();
+                    process.Kill();
+                    process.Dispose();
                 }
+                break;
+            }
+            case 2:
+            {
+                var currentProcess = Process.GetProcessById(Process.GetCurrentProcess().Id);
+                currentProcess.Kill();
+                currentProcess.Dispose();
                 break;
             }
             default:
