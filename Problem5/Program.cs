@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 
 class Program
 {
@@ -8,33 +9,32 @@ class Program
         TransformToElephant();
         Console.WriteLine("Муха");
         //... custom application code
+        Console.WriteLine("Рыба");
+        Console.WriteLine("Муха");
     }
 
     static void TransformToElephant()
     {
-        Console.Write("Слон");
-
-        Thread currentThread = Thread.CurrentThread;
-        Thread newThread = new(() =>
-            {
-                try
-                {
-                    currentThread.Join();
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine("Пиво");
-                }
-            });
-
-        newThread.Start();
-        newThread.Join();
-
-        Console.SetOut(null);
+        Console.WriteLine("Слон");
+        Console.SetOut(new MyConsoleWriter());
     }
 
-    static int Help()
+    public class MyConsoleWriter : StringWriter
     {
-        return 0;
+        TextWriter consoleOut = Console.Out;
+        bool writeText = false;
+
+        public override void WriteLine(string? str)
+        {
+            if(writeText == false)
+            {
+                writeText = true;
+            }
+            else
+            {
+                Console.SetOut(consoleOut);
+                Console.WriteLine(str);
+            }
+        }
     }
 }
